@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stack — Independent Minds. One Stack.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #181a1e;
+      --beige:    #eaeae4;
+      --accent:   #c0ff72;
+      --mid:      #1f2125;
+      --grey:     #8d8d87;
+      --border:   #2c2e33;
+      --muted:    #3a3c42;
+      --radius:   4px;
+      --heading:  'Bebas Neue', Impact, sans-serif;
+      --body:     'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      --max:      1100px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--charcoal);
+      color: var(--beige);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.65;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Layout ───────────────────────────────────── */
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    section {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Nav ──────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(24, 26, 30, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-logo { display: flex; align-items: center; }
+    .nav-logo img {
+      height: 64px;
+      width: auto;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--accent);
+      padding: 9px 22px;
+      border-radius: var(--radius);
+      transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── Hero ─────────────────────────────────────── */
+    #hero {
+      border-top: none;
+      padding: 180px 0 120px;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--body);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 32px;
+    }
+
+    .hero-heading {
+      font-family: var(--heading);
+      font-size: clamp(64px, 10vw, 130px);
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 44px;
+    }
+
+    .hero-heading em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      max-width: 540px;
+      font-size: 17px;
+      color: var(--grey);
+      line-height: 1.75;
+      margin-bottom: 56px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--heading);
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--accent);
+      padding: 16px 40px;
+      border-radius: var(--radius);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-ghost {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--grey);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .btn-ghost:hover { color: var(--beige); }
+
+    .hero-tagline {
+      margin-top: 100px;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--border);
+    }
+
+    /* ── Section headers ──────────────────────────── */
+    .section-label {
+      font-family: var(--body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .section-heading {
+      font-family: var(--heading);
+      font-size: clamp(36px, 5.5vw, 64px);
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      line-height: 0.95;
+      margin-bottom: 24px;
+    }
+
+    .section-sub {
+      color: var(--grey);
+      max-width: 540px;
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 56px;
+    }
+
+    /* ── What Stack Is ────────────────────────────── */
+    #what .bullets {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2px;
+    }
+
+    .bullet-card {
+      background: var(--mid);
+      padding: 36px 32px;
+      border-radius: var(--radius);
+      transition: background 0.2s;
+    }
+
+    .bullet-card:hover { background: var(--border); }
+
+    .bullet-node {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .bullet-title {
+      font-family: var(--heading);
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .bullet-desc {
+      font-size: 14px;
+      color: var(--grey);
+      line-height: 1.65;
+    }
+
+    /* ── Who we're looking for ────────────────────── */
+    #who {
+      background: var(--mid);
+    }
+
+    .disciplines-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .discipline-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: transparent;
+      color: var(--beige);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .discipline-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .discipline-tag .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── How It Works ─────────────────────────────── */
+    #how .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2px;
+    }
+
+    .step {
+      padding: 36px 32px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .step-num {
+      font-family: var(--body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .step-title {
+      font-family: var(--heading);
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .step-desc {
+      font-size: 14px;
+      color: var(--grey);
+      line-height: 1.65;
+    }
+
+    /* ── Emerging Designers ───────────────────────── */
+    #emerging {
+      background: var(--mid);
+    }
+
+    .emerging-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .emerging-grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    .emerging-benefits {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .emerging-benefits li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 15px;
+      color: var(--grey);
+      line-height: 1.6;
+    }
+
+    .emerging-benefits li .node {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+
+    .emerging-benefits li strong {
+      color: var(--beige);
+      font-weight: 500;
+    }
+
+    /* ── Apply Form ───────────────────────────────── */
+    #apply {
+      background: var(--charcoal);
+    }
+
+    .form-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .form-wrapper { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    .form-intro p {
+      color: var(--grey);
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .form-intro .colour-philosophy {
+      margin-top: 32px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .form-intro .colour-philosophy p {
+      font-size: 14px;
+      color: var(--grey);
+      margin-bottom: 0;
+    }
+
+    .form-intro .colour-philosophy strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 540px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    input, select, textarea {
+      background: var(--charcoal);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--beige);
+      font-family: var(--body);
+      font-size: 15px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--muted);
+    }
+
+    select option {
+      background: var(--charcoal);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* File upload */
+    .file-upload {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      background: var(--charcoal);
+      cursor: pointer;
+      transition: border-color 0.2s;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+
+    .file-upload:hover { border-color: var(--accent); }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+    }
+
+    .file-upload-text {
+      font-size: 14px;
+      color: var(--grey);
+    }
+
+    .file-upload.has-file { border-color: var(--accent); border-style: solid; }
+    .file-upload.has-file .file-upload-text { color: var(--accent); }
+
+    /* Colour picker */
+    .colour-field {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .colour-swatch {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .colour-swatch:hover { border-color: var(--beige); }
+
+    input[type="color"] {
+      position: absolute;
+      inset: -4px;
+      width: calc(100% + 8px);
+      height: calc(100% + 8px);
+      padding: 0;
+      border: none;
+      cursor: pointer;
+      opacity: 0;
+    }
+
+    .colour-hex {
+      font-family: var(--body);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--beige);
+    }
+
+    .colour-sub {
+      font-size: 12px;
+      color: var(--grey);
+      margin-top: 2px;
+    }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: var(--heading);
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      background: var(--accent);
+      border: none;
+      padding: 18px 36px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s, transform 0.2s;
+      width: 100%;
+    }
+
+    .submit-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .form-note {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    /* ── Footer ───────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+    }
+
+    footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-mark { display: flex; align-items: center; }
+    .footer-mark img {
+      height: 24px;
+      width: auto;
+    }
+
+    .footer-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 640px) {
+      section { padding: 72px 0; }
+      #hero { padding: 140px 0 80px; min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ── -->
+  <nav>
+    <div class="container">
+      <a href="#hero" class="nav-logo">
+        <img src="stackbranddesignwordmark.png" alt="Stack" />
+      </a>
+      <a href="#apply" class="nav-cta">Apply Now</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section id="hero">
+    <div class="container">
+      <p class="hero-eyebrow">A modular design studio</p>
+      <h1 class="hero-heading">
+        Independent<br>minds.<br><em>One Stack.</em>
+      </h1>
+      <p class="hero-sub">
+        Stack is a modular design studio built around structured collaboration.
+        We bring together specialists into project-ready teams &mdash; delivering
+        cohesive, high-quality work under one framework.
+      </p>
+      <div class="hero-actions">
+        <a href="#apply" class="btn-primary">Join Stack</a>
+        <a href="#what" class="btn-ghost">Learn more &#8595;</a>
+      </div>
+      <p class="hero-tagline">Stable at its core. Flexible at its edges.</p>
+    </div>
+  </section>
+
+  <!-- ── What Stack Is ── -->
+  <section id="what">
+    <div class="container">
+      <p class="section-label">01 &mdash; What Stack Is</p>
+      <h2 class="section-heading">Design<br>infrastructure.</h2>
+      <p class="section-sub">
+        Not a traditional agency. Not a freelance marketplace. Stack is a design
+        studio that assembles modular teams of specialists within a shared system
+        &mdash; replacing fragmented hiring with pre-integrated collaboration.
+      </p>
+      <div class="bullets">
+        <div class="bullet-card">
+          <div class="bullet-node"></div>
+          <div class="bullet-title">Modular teams</div>
+          <div class="bullet-desc">Stack assembles the right specialists for every brief. You're brought in where your skills are needed most.</div>
+        </div>
+        <div class="bullet-card">
+          <div class="bullet-node"></div>
+          <div class="bullet-title">Structured collaboration</div>
+          <div class="bullet-desc">Clear roles, shared direction, coordinated execution. No chaos &mdash; just aligned output under one roof.</div>
+        </div>
+        <div class="bullet-card">
+          <div class="bullet-node"></div>
+          <div class="bullet-title">Consistent work</div>
+          <div class="bullet-desc">As a Stack member, you have ongoing access to projects and retainers &mdash; no more chasing leads.</div>
+        </div>
+        <div class="bullet-card">
+          <div class="bullet-node"></div>
+          <div class="bullet-title">Shared ownership</div>
+          <div class="bullet-desc">Work produced through Stack is co-owned. You build your portfolio while contributing to the studio's output.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Who We're Looking For ── -->
+  <section id="who">
+    <div class="container">
+      <p class="section-label">02 &mdash; Who We're Looking For</p>
+      <h2 class="section-heading">The disciplines that<br>build the stack.</h2>
+      <p class="section-sub">
+        We're assembling a tight collective of independents across every
+        discipline that world-class work demands.
+      </p>
+      <div class="disciplines-grid">
+        <span class="discipline-tag"><span class="dot"></span>UI / UX Design</span>
+        <span class="discipline-tag"><span class="dot"></span>Brand &amp; Identity</span>
+        <span class="discipline-tag"><span class="dot"></span>Motion &amp; Animation</span>
+        <span class="discipline-tag"><span class="dot"></span>3D &amp; XR</span>
+        <span class="discipline-tag"><span class="dot"></span>Web Development</span>
+        <span class="discipline-tag"><span class="dot"></span>Design Strategy</span>
+        <span class="discipline-tag"><span class="dot"></span>Illustration</span>
+        <span class="discipline-tag"><span class="dot"></span>Art Direction</span>
+        <span class="discipline-tag"><span class="dot"></span>Copywriting</span>
+        <span class="discipline-tag"><span class="dot"></span>Creative Technology</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section id="how">
+    <div class="container">
+      <p class="section-label">03 &mdash; How It Works</p>
+      <h2 class="section-heading">Transparent<br>by default.</h2>
+      <p class="section-sub">
+        Transparency isn't a perk &mdash; it's the foundation.
+        Here's exactly what joining Stack means.
+      </p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-title">You join the studio</div>
+          <div class="step-desc">Become a Stack member. You stay with the studio and get brought into projects that match your skillset.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-title">Stack wins the work</div>
+          <div class="step-desc">Clients hire Stack. When a brief comes in, the studio assembles the right team from its members.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-title">You do what you do best</div>
+          <div class="step-desc">Focus on the craft. Stack handles coordination, client communication, contracts, and delivery.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-title">Shared ownership</div>
+          <div class="step-desc">Work is co-owned by Stack and the designer. You build your portfolio. Stack builds its reputation. Everyone wins.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Emerging Designers ── -->
+  <section id="emerging">
+    <div class="container">
+      <div class="emerging-grid">
+        <div>
+          <p class="section-label">04 &mdash; Emerging Designers</p>
+          <h2 class="section-heading">Learning as<br>participation.</h2>
+          <p class="section-sub">
+            Stack actively supports graduates and early-career designers by
+            integrating them into real project environments &mdash; paired with experienced
+            practitioners, not left to figure it out alone.
+          </p>
+        </div>
+        <ul class="emerging-benefits">
+          <li>
+            <span class="node"></span>
+            <span><strong>Real-world project experience</strong> &mdash; not observation, not hypotheticals. Actual briefs, actual clients, actual outcomes.</span>
+          </li>
+          <li>
+            <span class="node"></span>
+            <span><strong>Mentorship through collaboration</strong> &mdash; work alongside senior designers within structured project teams.</span>
+          </li>
+          <li>
+            <span class="node"></span>
+            <span><strong>Professional workflow exposure</strong> &mdash; client interaction, feedback loops, and delivery processes from day one.</span>
+          </li>
+          <li>
+            <span class="node"></span>
+            <span><strong>Portfolio-ready work</strong> &mdash; grounded in real outcomes, guided by experienced art direction.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Apply ── -->
+  <section id="apply">
+    <div class="container">
+      <div class="form-wrapper">
+        <div class="form-intro">
+          <p class="section-label">Join Stack</p>
+          <h2 class="section-heading">Ready to<br>build something<br>real?</h2>
+          <p>
+            Stack is application-based. We're keeping the collective curated
+            and high-quality. Whether you're a senior independent or an emerging
+            designer looking for your first real project environment &mdash; we want
+            to hear from you.
+          </p>
+          <p>
+            Applications are reviewed on a rolling basis. We'll be in touch personally.
+          </p>
+          <div class="colour-philosophy">
+            <p>
+              <strong>Stack owns the framework.<br>Designers own their colour.</strong>
+            </p>
+            <p style="margin-top:10px;">
+              Each contributor selects a personal colour that appears in nodes,
+              highlights, and project accents. Choose yours below.
+            </p>
+          </div>
+        </div>
+
+        <form id="joinForm" action="https://formspree.io/f/xojnzqkq" method="POST" enctype="multipart/form-data" novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" placeholder="Alex Rivera" required />
+            </div>
+            <div class="field">
+              <label for="location">Location</label>
+              <input type="text" id="location" name="location" placeholder="London, UK" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="alex@example.com" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" placeholder="+44 7700 900000" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="discipline">Primary Discipline</label>
+            <select id="discipline" name="discipline" required>
+              <option value="" disabled selected>Select your discipline</option>
+              <option>UI / UX Design</option>
+              <option>Brand &amp; Identity</option>
+              <option>Motion &amp; Animation</option>
+              <option>3D &amp; XR</option>
+              <option>Web Development</option>
+              <option>Design Strategy</option>
+              <option>Illustration</option>
+              <option>Art Direction</option>
+              <option>Copywriting</option>
+              <option>Creative Technology</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="portfolio">Portfolio / Website URL</label>
+            <input type="url" id="portfolio" name="portfolio" placeholder="https://yourwork.com" required />
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="experience">Years of Experience</label>
+              <select id="experience" name="experience" required>
+                <option value="" disabled selected>Select range</option>
+                <option>Graduate / Student</option>
+                <option>1&ndash;3 years</option>
+                <option>3&ndash;5 years</option>
+                <option>5&ndash;10 years</option>
+                <option>10+ years</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="availability">Availability</label>
+              <select id="availability" name="availability" required>
+                <option value="" disabled selected>Select availability</option>
+                <option>Fully available</option>
+                <option>1&ndash;2 days/week</option>
+                <option>3&ndash;4 days/week</option>
+                <option>Project-by-project only</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Resume upload -->
+          <div class="field">
+            <label for="resume">Resume / CV <span style="color:var(--muted);">(PDF, max 10MB)</span></label>
+            <label class="file-upload" id="fileLabel">
+              <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" />
+              <span class="file-upload-text" id="fileText">Choose file or drag here</span>
+            </label>
+          </div>
+
+          <!-- Colour picker -->
+          <div class="field">
+            <label>Your Colour</label>
+            <div class="colour-field">
+              <div class="colour-swatch" id="swatchWrap" style="background:#c0ff72;">
+                <input type="color" id="colourPick" name="colour" value="#c0ff72"
+                       aria-label="Pick a colour that represents you" />
+              </div>
+              <div>
+                <span class="colour-hex" id="hexDisplay">#C0FF72</span>
+                <p class="colour-sub">Pick the colour that represents you.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="statement">Why Stack? <span style="color:var(--muted);">(2&ndash;4 sentences)</span></label>
+            <textarea id="statement" name="statement" placeholder="What you'd bring to Stack and what you're looking for..." required></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">Submit Application</button>
+          <p class="form-note">We read every application personally.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-mark">
+        <img src="stackbranddesignlogomark.png" alt="Stack" />
+      </div>
+      <span class="footer-note">&copy; 2026 Stack Collective</span>
+    </div>
+  </footer>
+
+  <script>
+    /* ── Colour picker live update ── */
+    const picker   = document.getElementById('colourPick');
+    const swatch   = document.getElementById('swatchWrap');
+    const hexLabel = document.getElementById('hexDisplay');
+
+    picker.addEventListener('input', () => {
+      const val = picker.value.toUpperCase();
+      swatch.style.background = val;
+      hexLabel.textContent = val;
+    });
+
+    picker.addEventListener('click', (e) => e.stopPropagation());
+    swatch.addEventListener('click', () => picker.click());
+
+    /* ── File upload display ── */
+    const fileInput = document.getElementById('resume');
+    const fileLabel = document.getElementById('fileLabel');
+    const fileText  = document.getElementById('fileText');
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) {
+        fileText.textContent = fileInput.files[0].name;
+        fileLabel.classList.add('has-file');
+      } else {
+        fileText.textContent = 'Choose file or drag here';
+        fileLabel.classList.remove('has-file');
+      }
+    });
+
+    /* ── Form submission ── */
+    const form = document.getElementById('joinForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('.submit-btn');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      try {
+        const data = new FormData(form);
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          btn.textContent = 'Application Sent';
+          btn.style.background = '#2c2e33';
+          btn.style.color = '#c0ff72';
+        } else {
+          btn.textContent = 'Something went wrong — try again';
+          btn.style.background = '#2c2e33';
+          btn.style.color = '#c0ff72';
+          btn.disabled = false;
+        }
+      } catch {
+        btn.textContent = 'Connection error — try again';
+        btn.style.background = '#2c2e33';
+        btn.style.color = '#c0ff72';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
