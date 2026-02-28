@@ -928,13 +928,26 @@
     const fileLabel = document.getElementById('fileLabel');
     const fileText  = document.getElementById('fileText');
 
+    const MAX_FILE_MB = 10;
+    const MAX_FILE_BYTES = MAX_FILE_MB * 1024 * 1024;
+
     fileInput.addEventListener('change', () => {
       if (fileInput.files.length) {
-        fileText.textContent = fileInput.files[0].name;
+        const file = fileInput.files[0];
+        if (file.size > MAX_FILE_BYTES) {
+          fileText.textContent = 'File too large — max ' + MAX_FILE_MB + 'MB';
+          fileLabel.classList.remove('has-file');
+          fileLabel.style.borderColor = '#ff6b6b';
+          fileInput.value = '';
+          return;
+        }
+        fileText.textContent = file.name;
         fileLabel.classList.add('has-file');
+        fileLabel.style.borderColor = '';
       } else {
         fileText.textContent = 'Choose file or drag here';
         fileLabel.classList.remove('has-file');
+        fileLabel.style.borderColor = '';
       }
     });
 
